@@ -1,0 +1,9 @@
+Group: System Environment/Configuration
+License: GNU Lesser General Public License (LGPL) Version 3
+URL: http://postinstall.tekwire.net
+Packager: F. Laupretre
+Source: none
+BuildArch: noarch
+AutoReqProv: no
+Requires: sysfunc >= 1.1.16
+provides: %PRODUCT%
