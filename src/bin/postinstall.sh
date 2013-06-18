@@ -15,7 +15,7 @@ Options :
   -n :  Simulate execution (don't run modules)
   -f :  Force
   -l :  List defined modules (and exit)
-  -e : Use local cache (don't refresh from central config)
+  -e :  Use local cache (don't refresh from central config)
   -t <tag> : Add tag
   -b :  Just rebuild cache from central config (and exit)
   -i :  Install bootstrap (and exit)
@@ -47,13 +47,17 @@ fi
 
 . $_POST_LIBEXEC_DIR/functions.sh
 
+#-- Internal tags
+#-- _BOOTSTRAP is set from bootstrap.sh via the cmd line options
+
+_POST_TAGS="`sf_db_get postinstall:tags`"
+
 #-- Parse options
 
 _post_force=0
 _post_list_modules=''
 _post_build=1
 _post_just_build=''
-_POST_TAGS="`sf_db_get postinstall:tags`"
 _exit=''
 
 while getopts 'vynflet:biuc:h' flag
@@ -84,6 +88,16 @@ export sf_forceyes sf_verbose_level sf_noexec _post_force _post_list_modules \
 	_post_build _post_just_build _POST_TAGS
 
 export _POST_EXPLICIT_MODULES="$*"
+
+#-- Set _INTERACTIVE tag if a real terminal is connected to stdin (or bootstrap)
+
+tty -s >/dev/null 2>&1
+_isint=$?
+post_tag_isset _BOOTSTRAP && _isint=1
+[ "$_isint" = 0 ] && _POST_TAGS="$_POST_TAGS _INTERACTIVE"
+export _POST_TAGS
+
+sf_debug "Active tags: $_POST_TAGS"
 
 #-- Build dynamic script
 

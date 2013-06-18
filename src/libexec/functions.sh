@@ -30,7 +30,7 @@ _post_cfg_init()
 {
 # $1: Config dir
 
-sf_db_set "$POST_CFG_KEY" "$1"
+sf_db_set "$_POST_CFG_KEY" "$1"
 }
 
 #-----------
@@ -41,7 +41,7 @@ hook=`_bootstrap_hook`
 [ -z "$hook" ] && return 1
 
 /bin/rm -f $hook
-ln -s $POST_LIBEXEC_DIR/bootstrap.sh $hook
+ln -s $_POST_LIBEXEC_DIR/bootstrap.sh $hook
 }
 
 #-----------
@@ -156,7 +156,7 @@ typeset status module
 
 for module
 	do
-	_post_has_run $module && continue
+	post_has_run $module && continue
 
 	sf_trace "This action requires this module : $module"
 	_post_run_module $module
@@ -192,7 +192,7 @@ return 0
 #	0 : Module has run already
 #	!0 : Module has not run
 
-_post_has_run()
+post_has_run()
 {
 `_post_msymbol has_run $1`
 }
@@ -213,7 +213,7 @@ sf_debug "Starting will_run($module)"
 
 _post_can_run || return 1
 
-_post_has_run $_POST_CURRENT_MODULE
+post_has_run $_POST_CURRENT_MODULE
 status=$?
 
 if [ $status = 0 ] ; then
@@ -249,7 +249,7 @@ status=$?
 [ $status = 0 ] || return $status	# Other reason not to run
 
 _post_do_run
-_post_has_run $_POST_CURRENT_MODULE && return 0
+post_has_run $_POST_CURRENT_MODULE && return 0
 sf_error "$_POST_CURRENT_MODULE: Errors detected during module execution"
 return 1
 }
@@ -282,14 +282,6 @@ grep "^$1 " $_POST_CACHE_DIR/modules.list | sed 's,^[^ ]* ,,'
 }
 
 #-------------------------
-
-_post_var()
-{
-c="echo \$`_post_msymbol $1 $2`"
-eval "$c"
-}
-
-#-------------------------
 # Can be called by a module 'can_run' code with no arg (for current module) or
 # internally with a module name arg.
 
@@ -297,13 +289,13 @@ post_module_explicit_run()
 {
 # $1 = module
 
-[ -z "_POST_EXPLICIT_MODULES" ] && return 1
+[ -z "$_POST_EXPLICIT_MODULES" ] && return 1
 
 module=$1
 [ -z "$module" ] && module=$_POST_CURRENT_MODULE
 [ -z "$module" ] && return 1
 
-for spec in _POST_EXPLICIT_MODULES
+for spec in $_POST_EXPLICIT_MODULES
 	do
 	[ "$spec" = ALL ] && return 0
 	[ "$module" = "$spec" ] && return 0
@@ -373,6 +365,8 @@ _post_clean_cache()
 }
 
 #---------------
+# Used by build.sh
+# Transfer a file from central repo to local cache
 
 _post_sync_file()
 {
@@ -381,8 +375,10 @@ typeset source fname
 for source ; do
 	fname=`basename $source`
 	\rm -rf "$_POST_CACHE_DIR/$fname"
-	[ -f "$_POST_CFG_BASE/$source" ] && \cp "$_POST_CFG_BASE/$source" "$_POST_CACHE_DIR"
-	chmod 444 "$_POST_CACHE_DIR/$fname"
+	if [ -f "$_POST_CFG_BASE/$source" ] ; then
+		\cp "$_POST_CFG_BASE/$source" "$_POST_CACHE_DIR"
+		chmod 444 "$_POST_CACHE_DIR/$fname"
+	fi
 done
 }
 

@@ -26,6 +26,6 @@ export SF_ERRLOG=$_POST_TMP_DIR/.postinstall_$$.err
 
 #--- Other
 
-export POST_CFG_KEY=postinstall:config/base
+export _POST_CFG_KEY=postinstall:config/base
 
 #-------------------------------------------------------------------------------

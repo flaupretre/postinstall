@@ -2,17 +2,13 @@
 
 exec >/dev/console 2>&1
 
-#-- Load shell environment
-
-. /opt/postinstall/libexec/env.sh
-
 #-- Load sysfunc
 
 . sysfunc.sh
 
 #-- Run bootstrap
 
-postinstall -y -t _BOOTSTRAP
+postinstall -v -y -t _BOOTSTRAP
 
 #-- Remove bootstrap hook
 

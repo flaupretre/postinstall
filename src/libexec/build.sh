@@ -44,7 +44,7 @@ return 0
 #---------------
 #-- MAIN
 
-export _POST_CFG_BASE="`sf_db_get $POST_CFG_KEY`"
+export _POST_CFG_BASE="`sf_db_get $_POST_CFG_KEY`"
 if [ "X$_POST_CFG_BASE" = X ] ; then
 	sf_fatal "Central repo location not set"
 fi
@@ -84,9 +84,9 @@ sort <$_TMP1 | while read dummy module path
 	echo
 	grep -v '^%DESCRIPTION ' <$path \
 		| grep -v '^%DOC' | sed \
-		-e "s,^%CAN_RUN,`_post_msymbol can_run $module`," \
-		-e "s,^%HAS_RUN,`_post_msymbol has_run $module`," \
-		-e "s,^%RUN,`_post_msymbol run $module`,"
+		-e "s,^%CAN_RUN(),function `_post_msymbol can_run $module`," \
+		-e "s,^%HAS_RUN(),function `_post_msymbol has_run $module`," \
+		-e "s,^%RUN(),function `_post_msymbol run $module`,"
 	echo
 	# \/ Remove <CR> chars that may have been introduced by Windows editors
 done | sed 's,\r,,g' >>$_POST_CACHED_MODULES_SH

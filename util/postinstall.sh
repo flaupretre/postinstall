@@ -37,4 +37,4 @@ for s in bash ksh
 	[ -x $link_source ] && break
 done
 
-if [ ! -x $link_source ] &&	sf_fatal "Cannot find any posix-compatible shell on this host"
+[ -x $link_source ] || sf_fatal "Cannot find any posix-compatible shell on this host"
