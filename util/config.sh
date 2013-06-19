@@ -18,7 +18,7 @@
 
 PRODUCT=postinstall
 DESCRIPTION="Software installation and configuration utility"
-VERSION=1.0
+VERSION=1.1
 RELEASE=1
 
 export PRODUCT DESCRIPTION VERSION RELEASE
