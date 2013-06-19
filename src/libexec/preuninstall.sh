@@ -16,6 +16,30 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #=============================================================================
 
-/opt/postinstall/libexec/postinstall.sh
+#=== When uninstalling using RPM, this script is automatically executed.
+#=== When uninstalling manually, theis script must be executed before
+#=== the /opt/postinstall file tree is deleted
+#=============================================================================
+
+if [ ! -f /usr/bin/sysfunc.sh ] ; then
+	echo "ERROR: This software requires the sysfunc library (see http://sysfunc.tekwire.net)"
+	exit 1
+fi
+
+. sysfunc.sh
+
+#---
+
+_base=/opt/postinstall
+
+#--- Remove the shell link
+
+_link_source=$_base/libexec/shell
+
+sf_delete $_link_source
+
+#--- Remove cache dir
+
+sf_delete $_base/cache
 
 #=============================================================================

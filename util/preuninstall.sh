@@ -16,4 +16,6 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #=============================================================================
 
-\rm -rf /opt/$PRODUCT/libexec/shell
+/opt/postinstall/libexec/preuninstall.sh
+
+#=============================================================================

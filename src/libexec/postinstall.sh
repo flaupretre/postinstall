@@ -15,36 +15,44 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #=============================================================================
-#
-#	Build packages (rpm and tgz)
-#
+
+#=== When installing from an RPM package, this script is automatically executed.
+#=== When installing from a zip/tgz package, this script must be run after the
+#=== package file is extracted to /opt/postinstall.
 #=============================================================================
 
-. pkg_func.sh
+if [ ! -f /usr/bin/sysfunc.sh ] ; then
+	echo "ERROR: This software requires the sysfunc library (see http://sysfunc.tekwire.net)"
+	exit 1
+fi
 
-tdir=/opt/$PRODUCT
-link_source1=/usr/bin/$PRODUCT
-link_target=$tdir/bin/$PRODUCT.sh
+. sysfunc.sh
 
-files="$tdir $link_source1"
+#---
 
-export tdir link_source1 link_target files
+_base=/opt/postinstall
 
-#-- Specific - Copy source files
+#--- Create a posix-compatible shell link
 
-cd $sdir
+_link_source=$_base/libexec/shell
 
-\rm -rf $tdir
-mkdir -p $tdir
-cp -rp src/bin src/libexec $tdir
-mkdir $tdir/util
-chmod 444 $tdir/util/*
-cp util/config.sh $tdir/util/config.sh
+for _s in bash ksh
+	do
+	for _d in /bin /usr/bin /sbin /usr/sbin /usr/local/bin /usr/local/sbin
+		do
+		if [ -x $_d/$_s ] ; then
+			sf_msg "postinstall will use this shell: $_d/$_s"
+			sf_check_link $_d/$_s $_link_source
+			break
+		fi
+	done
+	[ -x $_link_source ] && break
+done
 
-mk_link $link_target $link_source1	#-- Create symbolic links
+[ -x $_link_source ] || sf_fatal "Cannot find any posix-compatible shell on this host"
 
-#--
+#--- Create the cache dir
 
-build_packages
+sf_create_dir $_base/cache root 700
 
-cleanup
+#=============================================================================
