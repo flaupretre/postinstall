@@ -21,6 +21,15 @@
 #=== the /opt/postinstall file tree is deleted
 #=============================================================================
 
+# When upgrading package, do nothing (remember that, during an upgrade,
+# uninstall of old package is done AFTER installation of new).
+# When uninstalling, preun script receives '0' as cmd line arg. When upgrading,
+# it receives '1'.
+
+[ -n "$1" -a "$1" != 0 ] && exit 0
+
+#---
+
 if [ ! -f /usr/bin/sysfunc.sh ] ; then
 	echo "ERROR: This software requires the sysfunc library (see http://sysfunc.tekwire.net)"
 	exit 1

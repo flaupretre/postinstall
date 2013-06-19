@@ -41,7 +41,7 @@ for _s in bash ksh
 	for _d in /bin /usr/bin /sbin /usr/sbin /usr/local/bin /usr/local/sbin
 		do
 		if [ -x $_d/$_s ] ; then
-			sf_msg "postinstall will use this shell: $_d/$_s"
+			sf_msg1 "postinstall will use this shell: $_d/$_s"
 			sf_check_link $_d/$_s $_link_source
 			break
 		fi
@@ -51,8 +51,12 @@ done
 
 [ -x $_link_source ] || sf_fatal "Cannot find any posix-compatible shell on this host"
 
+#--- Ensure scripts are executable
+
+chmod 755 $_base/bin/* $_base/libexec/*
+
 #--- Create the cache dir
 
-sf_create_dir $_base/cache root 700
+sf_create_dir $_base/cache root 755
 
 #=============================================================================

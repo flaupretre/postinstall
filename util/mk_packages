@@ -37,9 +37,11 @@ cd $sdir
 \rm -rf $tdir
 mkdir -p $tdir
 cp -rp src/bin src/libexec $tdir
+chmod 755 $tdir/bin/* $tdir/libexec/*
+
 mkdir $tdir/util
-chmod 444 $tdir/util/*
 cp util/config.sh $tdir/util/config.sh
+chmod 444 $tdir/util/*
 
 mk_link $link_target $link_source1	#-- Create symbolic links
 

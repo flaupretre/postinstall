@@ -16,6 +16,6 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #=============================================================================
 
-/opt/postinstall/libexec/postinstall.sh
+/opt/postinstall/libexec/postinstall.sh $*
 
 #=============================================================================
