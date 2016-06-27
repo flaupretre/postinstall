@@ -30,25 +30,19 @@
 
 #---
 
-if [ ! -f /usr/bin/sysfunc.sh ] ; then
+if [ ! -f /usr/bin/sysfunc ] ; then
 	echo "ERROR: This software requires the sysfunc library (see http://sysfunc.tekwire.net)"
 	exit 1
 fi
 
-. sysfunc.sh
-
-#---
-
-_base=/opt/postinstall
+. sysfunc
 
 #--- Remove the shell link
 
-_link_source=$_base/libexec/shell
-
-sf_delete $_link_source
+sf_delete %INSTALL_DIR%/shell
 
 #--- Remove cache dir
 
-sf_delete $_base/cache
+sf_delete %INSTALL_DIR%/cache
 
 #=============================================================================

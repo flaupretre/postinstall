@@ -1,5 +1,5 @@
 #
-# Copyright 2010 - Francois Laupretre <francois@tekwire.net>
+# Copyright 2009-2014 - Francois Laupretre <francois@tekwire.net>
 #
 #=============================================================================
 # This program is free software: you can redistribute it and/or modify
@@ -15,38 +15,16 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #=============================================================================
-#
-#	Build packages (rpm and tgz)
-#
-#=============================================================================
 
-. pkg_func.sh
+CMD=`basename $0`
+cd `dirname $0`/..
+SOFTWARE_VERSION="$1"
+INSTALL_DIR="$2"
 
-tdir=/opt/$PRODUCT
-link_source1=/usr/bin/$PRODUCT
-link_target=$tdir/bin/$PRODUCT.sh
+export SOFTWARE_VERSION INSTALL_DIR
 
-files="$tdir $link_source1"
+sed -e "s,%SOFTWARE_VERSION%,$SOFTWARE_VERSION,g" \
+	-e "s,%INSTALL_DIR%,$INSTALL_DIR,g" \
+	<specfile.in >specfile
 
-export tdir link_source1 link_target files
-
-#-- Specific - Copy source files
-
-cd $sdir
-
-\rm -rf $tdir
-mkdir -p $tdir
-cp -rp src/bin src/libexec $tdir
-chmod 755 $tdir/bin/* $tdir/libexec/*
-
-mkdir $tdir/util
-cp util/config.sh $tdir/util/config.sh
-chmod 444 $tdir/util/*
-
-mk_link $link_target $link_source1	#-- Create symbolic links
-
-#--
-
-build_packages
-
-cleanup
+###############################################################################

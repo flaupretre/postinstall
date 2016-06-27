@@ -1,4 +1,4 @@
-#!/opt/postinstall/libexec/shell
+#!%INSTALL_DIR%/shell
 
 #-----------
 
@@ -32,16 +32,15 @@ export _POST_RC=0
 
 #-- Load shell environment
 
-. /opt/postinstall/libexec/env.sh
+. %INSTALL_DIR%/libexec/env.sh
 
 #-- Load sysfunc
 
-if [ ! -f /opt/sysfunc/sysfunc.sh ] ; then
-	echo "Sysfunc lib required and not found !"
+. sysfunc 2>/dev/null
+if ! sf_loaded 2>/dev/null ; then
+	echo "Fatal error: Cannot load sysfunc library - Aborting"
 	exit 1
 fi
-
-. sysfunc.sh
 
 #-- Load shell functions
 

@@ -1,5 +1,5 @@
 #
-# Copyright 2010 - Francois Laupretre <francois@tekwire.net>
+# Copyright 2009-2014 - Francois Laupretre <francois@tekwire.net>
 #
 #=============================================================================
 # This program is free software: you can redistribute it and/or modify
@@ -16,9 +16,40 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #=============================================================================
 
-PRODUCT=postinstall
-DESCRIPTION="Software installation and configuration utility"
-VERSION=1.1
-RELEASE=1
+Name: postinstall
+Version: %SOFTWARE_VERSION%
+Release: 1%{?dist}
+Summary: Software installation and configuration utility
+License: GNU LESSER GENERAL PUBLIC LICENSE, Version 3
+Group: System Environment/Configuration
+Source: %{name}-%{version}.tar.gz
+BuildArch: noarch
+BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}
+Requires: sysfunc >= 2.0.0
+BuildRequires: sysfunc >= 2.0.0
+Prefix: %INSTALL_DIR%
+%description
+Software installation and configuration utility
 
-export PRODUCT DESCRIPTION VERSION RELEASE
+%prep
+%setup -q
+
+%build
+make
+
+%install
+INSTALL_ROOT=$RPM_BUILD_ROOT make install INSTALL_DIR=%{prefix} 
+
+%preun
+%INSTALL_DIR%/libexec/preuninstall.sh
+
+%post
+%INSTALL_DIR%/libexec/postinstall.sh
+
+%clean
+rm -rf $RPM_BUILD_ROOT
+
+%files
+%defattr(-,root,root)
+%{prefix}
+/usr/bin/postinstall

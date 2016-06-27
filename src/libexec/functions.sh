@@ -362,6 +362,7 @@ exit $rc
 _post_clean_cache()
 {
 \rm -rf $_POST_CACHE_DIR/* 2>/dev/null
+[ -d $_POST_CACHE_DIR ] || mkdir $_POST_CACHE_DIR
 }
 
 #---------------
@@ -376,7 +377,7 @@ for source ; do
 	fname=`basename $source`
 	\rm -rf "$_POST_CACHE_DIR/$fname"
 	if [ -f "$_POST_CFG_BASE/$source" ] ; then
-		\cp "$_POST_CFG_BASE/$source" "$_POST_CACHE_DIR"
+		\cp "$_POST_CFG_BASE/$source" "$_POST_CACHE_DIR/$fname"
 		chmod 444 "$_POST_CACHE_DIR/$fname"
 	fi
 done

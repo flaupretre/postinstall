@@ -1,10 +1,10 @@
-#!/opt/postinstall/libexec/shell
+#!%INSTALL_DIR%/shell
 
 exec >/dev/console 2>&1
 
 #-- Load sysfunc
 
-. sysfunc.sh
+. sysfunc
 
 #-- Run bootstrap
 

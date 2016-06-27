@@ -6,9 +6,9 @@
 # Reloading env.sh is not mandatory when called from postinstall.sh but is done
 # to allow calling build.sh from command line.
 
-. /opt/postinstall/libexec/env.sh
+. %INSTALL_DIR%/libexec/env.sh
 
-. sysfunc.sh
+. sysfunc
 
 . $_POST_LIBEXEC_DIR/functions.sh
 

@@ -1,5 +1,5 @@
 #
-# Copyright 2010 - Francois Laupretre <francois@tekwire.net>
+# Copyright 2009-2014 - Francois Laupretre <francois@tekwire.net>
 #
 #=============================================================================
 # This program is free software: you can redistribute it and/or modify
@@ -16,6 +16,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #=============================================================================
 
-/opt/postinstall/libexec/preuninstall.sh $*
+INSTALL_DIR = /opt/postinstall
 
-#=============================================================================
+SOFTWARE_VERSION = 1.2.0
+
+#============================================================================

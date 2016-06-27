@@ -21,42 +21,23 @@
 #=== package file is extracted to /opt/postinstall.
 #=============================================================================
 
-if [ ! -f /usr/bin/sysfunc.sh ] ; then
+. sysfunc
+sf_loaded 2>/dev/null
+if [ $? != 0 ] ; then
 	echo "ERROR: This software requires the sysfunc library (see http://sysfunc.tekwire.net)"
 	exit 1
 fi
 
-. sysfunc.sh
-
-#---
-
-_base=/opt/postinstall
-
-#--- Create a posix-compatible shell link
-
-_link_source=$_base/libexec/shell
-
-for _s in bash ksh
-	do
-	for _d in /bin /usr/bin /sbin /usr/sbin /usr/local/bin /usr/local/sbin
-		do
-		if [ -x $_d/$_s ] ; then
-			sf_msg1 "postinstall will use this shell: $_d/$_s"
-			sf_check_link $_d/$_s $_link_source
-			break
-		fi
-	done
-	[ -x $_link_source ] && break
-done
-
-[ -x $_link_source ] || sf_fatal "Cannot find any posix-compatible shell on this host"
-
 #--- Ensure scripts are executable
 
-chmod 755 $_base/bin/* $_base/libexec/*
+chmod 755 %INSTALL_DIR%/bin/* %INSTALL_DIR%/libexec/*
 
 #--- Create the cache dir
 
-sf_create_dir $_base/cache root 755
+sf_create_dir %INSTALL_DIR%/cache root 755
+
+#--- Create a posix-compatible shell link as %INSTALL_DIR%/shell
+
+. %INSTALL_DIR%/libexec/set-shell.sh
 
 #=============================================================================

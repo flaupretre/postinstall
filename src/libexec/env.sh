@@ -7,7 +7,7 @@ unset LANG LC_MONETARY LC_TIME LC_MESSAGES LC_CTYPE LC_COLLATE LC_NUMERIC || :
 
 #--- Base
 
-export _POST_BASE=/opt/postinstall
+export _POST_BASE=%INSTALL_DIR%
 
 #--- Internal/cached
 
